@@ -1,12 +1,12 @@
 h1 {
     text-align: center;
-    font-family: Optima,Segoe,Segoe UI,Candara,Calibri,Arial,sans-serif;
+    font-family: Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
     font-size: 48px;
 }
 
-header{
+header {
     background-color: #16BAC5;
-    font-family: Optima,Segoe,Segoe UI,Candara,Calibri,Arial,sans-serif;
+    font-family: Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
     font-size: 20px;
     color: white;
     height: 34px;
@@ -20,17 +20,13 @@ header{
 
 #datasourcebutton {
     width: 195px;
-    float:right;
+    float: right;
 }
 
-
-
-
-body{
+body {
     background-color: white;
-    font-family: Optima,Segoe,Segoe UI,Candara,Calibri,Arial,sans-serif;
+    font-family: Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
 }
-
 
 #histholder, #tsholder, #bpndholder, #bpclsholder, #pdfholder, #tsqlholder {
     height: 400px;
@@ -40,15 +36,24 @@ body{
     background-color: white;
 }
 
-#plotoptions{
+.plotoptions {
+    position: absolute;
+    z-index: 100;
     text-align: center;
-    background-color: #FFF3D1;
     float: center;
-    width: 100%;
+    width: 48.7%;
     border-radius: 5px;
     border-bottom: solid;
     border-color: #FFBE00;
     border-width: 2px;
+}
+
+.options {
+    background-color: rgba(255, 229, 153, 0.8);
+}
+
+.vis {
+    margin-top: 56px;
 }
 
 @media (max-width: 1000px) {
@@ -65,17 +70,17 @@ body{
     width: 100%;
 }
 
-input[type=range]{
+input[type=range] {
     width: 20%;
 }
 
-.form-control{
+.form-control {
     width: 35%;
     margin-left: 32.5%;
     margin-right: 32.5%;
 }
 
-#dataselect-formcontrol{
+#dataselect-formcontrol {
     margin: 0px 0px 0px 0px;
 }
 
@@ -84,113 +89,61 @@ input[type=range]{
 }
 
 
-
-
-
-
-
-
 /*Custom button for Plot Titles*/
 
-.btn-graphtitle { 
-  color: #000000; 
-  background-color: #FFBE00; 
-  border-color: #FFCB33; 
-} 
- 
-.btn-graphtitle:hover, 
-.btn-graphtitle:focus, 
-.btn-graphtitle:active, 
-.btn-graphtitle.active, 
-.open .dropdown-toggle.btn-graphtitle { 
-  color: #000000; 
-  background-color: #FFE599; 
-  border-color: #FFCB33; 
-} 
- 
-.btn-graphtitle:active, 
-.btn-graphtitle.active, 
-.open .dropdown-toggle.btn-graphtitle { 
-  background-image: none; 
-} 
- 
-.btn-graphtitle.disabled, 
-.btn-graphtitle[disabled], 
-fieldset[disabled] .btn-graphtitle, 
-.btn-graphtitle.disabled:hover, 
-.btn-graphtitle[disabled]:hover, 
-fieldset[disabled] .btn-graphtitle:hover, 
-.btn-graphtitle.disabled:focus, 
-.btn-graphtitle[disabled]:focus, 
-fieldset[disabled] .btn-graphtitle:focus, 
-.btn-graphtitle.disabled:active, 
-.btn-graphtitle[disabled]:active, 
-fieldset[disabled] .btn-graphtitle:active, 
-.btn-graphtitle.disabled.active, 
-.btn-graphtitle[disabled].active, 
-fieldset[disabled] .btn-graphtitle.active { 
-  background-color: #FFBE00; 
-  border-color: #FFCB33; 
-} 
- 
-.btn-graphtitle .badge { 
-  color: #FFBE00; 
-  background-color: #000000; 
+.btn-graphtitle {
+    color: #000000;
+    opacity: 1;
+    background-color: #FFBE00;
+    border-color: #FFCB33;
 }
 
+.btn-graphtitle:hover, .btn-graphtitle:focus, .btn-graphtitle:active, .btn-graphtitle.active, .open .dropdown-toggle.btn-graphtitle {
+    color: #000000;
+    opacity: 1;
+    background-color: #FFE599;
+    border-color: #FFCB33;
+}
 
+.btn-graphtitle:active, .btn-graphtitle.active, .open .dropdown-toggle.btn-graphtitle {
+    background-image: none;
+}
 
+.btn-graphtitle.disabled, .btn-graphtitle[disabled], fieldset[disabled] .btn-graphtitle, .btn-graphtitle.disabled:hover, .btn-graphtitle[disabled]:hover, fieldset[disabled] .btn-graphtitle:hover, .btn-graphtitle.disabled:focus, .btn-graphtitle[disabled]:focus, fieldset[disabled] .btn-graphtitle:focus, .btn-graphtitle.disabled:active, .btn-graphtitle[disabled]:active, fieldset[disabled] .btn-graphtitle:active, .btn-graphtitle.disabled.active, .btn-graphtitle[disabled].active, fieldset[disabled] .btn-graphtitle.active {
+    background-color: #FFBE00;
+    border-color: #FFCB33;
+}
 
-
-
-
-
+.btn-graphtitle .badge {
+    color: #FFBE00;
+    background-color: #000000;
+}
 
 
 /*Custom button for top bar*/
 
-.btn-topbar { 
-  color: #FFFFFF; 
-  background-color: #33C3CC; 
-  border-color: #118C94; 
-} 
- 
-.btn-topbar:hover, 
-.btn-topbar:focus, 
-.btn-topbar:active, 
-.btn-topbar.active, 
-.open .dropdown-toggle.btn-topbar { 
-  color: #FFFFFF; 
-  background-color: #8BDDE2; 
-  border-color: #6DD4DB; 
-} 
- 
-.btn-topbar:active, 
-.btn-topbar.active, 
-.open .dropdown-toggle.btn-topbar { 
-  background-image: none; 
-} 
- 
-.btn-topbar.disabled, 
-.btn-topbar[disabled], 
-fieldset[disabled] .btn-topbar, 
-.btn-topbar.disabled:hover, 
-.btn-topbar[disabled]:hover, 
-fieldset[disabled] .btn-topbar:hover, 
-.btn-topbar.disabled:focus, 
-.btn-topbar[disabled]:focus, 
-fieldset[disabled] .btn-topbar:focus, 
-.btn-topbar.disabled:active, 
-.btn-topbar[disabled]:active, 
-fieldset[disabled] .btn-topbar:active, 
-.btn-topbar.disabled.active, 
-.btn-topbar[disabled].active, 
-fieldset[disabled] .btn-topbar.active { 
-  background-color: #FFBE00; 
-  border-color: #FFCB33; 
-} 
- 
-.btn-topbar .badge { 
-  color: #FFBE00; 
-  background-color: #000000; 
+.btn-topbar {
+    color: #FFFFFF;
+    background-color: #33C3CC;
+    border-color: #118C94;
+}
+
+.btn-topbar:hover, .btn-topbar:focus, .btn-topbar:active, .btn-topbar.active, .open .dropdown-toggle.btn-topbar {
+    color: #FFFFFF;
+    background-color: #8BDDE2;
+    border-color: #6DD4DB;
+}
+
+.btn-topbar:active, .btn-topbar.active, .open .dropdown-toggle.btn-topbar {
+    background-image: none;
+}
+
+.btn-topbar.disabled, .btn-topbar[disabled], fieldset[disabled] .btn-topbar, .btn-topbar.disabled:hover, .btn-topbar[disabled]:hover, fieldset[disabled] .btn-topbar:hover, .btn-topbar.disabled:focus, .btn-topbar[disabled]:focus, fieldset[disabled] .btn-topbar:focus, .btn-topbar.disabled:active, .btn-topbar[disabled]:active, fieldset[disabled] .btn-topbar:active, .btn-topbar.disabled.active, .btn-topbar[disabled].active, fieldset[disabled] .btn-topbar.active {
+    background-color: #FFBE00;
+    border-color: #FFCB33;
+}
+
+.btn-topbar .badge {
+    color: #FFBE00;
+    background-color: #000000;
 }
