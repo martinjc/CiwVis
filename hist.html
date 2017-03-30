@@ -18,3 +18,113 @@
       </div>
 </div>
 <div id="histogram" class="vis"></div><script src="js/histogram.js"></script>
+<script>
+
+// create a histogram with default values and no data
+var chart = histogram();
+
+// instantiate the histogram and add it to the page
+d3.select('#histogram')
+    .call(chart);
+
+// read in the data
+var histdatafile = choosefile('waitingdata.json')
+const histfileReader = new FileReader();
+histfileReader.onload = event => {
+    const contentsOfFile = event.target.result;
+    raw_data = JSON.parse(contentsOfFile);
+    // once the data is read, update the histogram
+    update_hist();
+}
+histfileReader.readAsText(histdatafile);
+
+function update_hist() {
+
+    // read correct width and height values
+    var width = document.getElementById("histogram")
+        .clientWidth;
+    var height = document.getElementById("histogram")
+        .clientHeight;
+
+    // extract parameters
+    var num_nodes = parseInt(sessionStorage.getItem('Number_of_nodes'))
+    var num_classes = parseInt(sessionStorage.getItem('Number_of_classes'))
+    var num_trials = parseInt(sessionStorage.getItem('Number_of_trials'))
+
+    var numberofbins = parseInt(d3.select('#numbins')
+        .node()
+        .value);
+    var warmup = parseInt(d3.select('#warmup')
+        .node()
+        .value);
+    var trialnumber = parseInt(d3.select('#trial_hist')
+        .node()
+        .value);
+    var allon = document.getElementById('all_hist');
+    var meanson = document.getElementById('means_hist');
+    var trialon = document.getElementById('trialon_hist');
+
+    // build the data
+    var validNodes = {}
+    var validClasses = {}
+
+    for (i = 1; i <= num_nodes; i++) {
+        if (document
+            .getElementById('node' + i + 'hist')
+            .checked) {
+            validNodes[i] = true
+        }
+    };
+    for (i = 0; i < num_classes; i++) {
+        if (document
+            .getElementById('class' + i + 'hist')
+            .checked) {
+            validClasses[i] = true
+        }
+    };
+
+    var mydataintermediate = raw_data.filter(function(d) {
+        return d.Node in validNodes &&
+            d.Customer_class in validClasses &&
+            d.Arrival_date >= warmup;
+    });
+
+    if (allon.checked) {
+        mydata = mydataintermediate;
+    };
+    if (meanson.checked) {
+        mydata = meanwait(mydataintermediate, num_trials);
+    };
+    if (trialon.checked) {
+        mydata = mydataintermediate.filter(function(d) {
+            return d.Trial == trialnumber;
+        });
+    };
+
+    // update chart details
+    chart
+        .width(width)
+        .height(height)
+        .numberofbins(numberofbins)
+        .data(mydata);
+
+}
+
+
+function meanwait(data, num_trials) {
+    var meanwaits = []
+    for (t = 0; t < num_trials; t++) {
+        var trialmean = jStat.mean(data.filter(function(d) {
+                return d.Trial == t;
+            })
+            .map(function(d) {
+                return d.Waiting_time;
+            }))
+        var point = {
+            'Waiting_time': trialmean
+        }
+        meanwaits.push(point)
+    };
+    return meanwaits
+};
+</script>
