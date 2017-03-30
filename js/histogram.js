@@ -168,7 +168,6 @@ function histogram() {
                     .select('rect')
                     .transition(t)
                     .attr("x", function(d) {
-                        console.log('d');
                         return (d.x0 * width) / maxValue;
                     })
                     .attr("fill", "#ff6600")
@@ -181,11 +180,10 @@ function histogram() {
                     })
 
                 newbar
+                    .select('rect')
                     .on("mouseover", function(d) {
 
                         d3.select(this)
-                            .select('rect')
-                            .transition()
                             .attr("fill", "#ff9900");
 
                         tooltip
@@ -207,7 +205,6 @@ function histogram() {
                     })
                     .on("mouseout", function(d) {
                         d3.select(this)
-                            .select('rect')
                             .attr("fill", "#ff6600");
                         tooltip
                             .attr('display', 'none');
@@ -233,7 +230,7 @@ function histogram() {
 
                 var text = tooltip
                     .append('text')
-                    .attr('dx', 20)
+                    .attr('dx', 10)
                     .attr('dy', 20)
 
                 text
@@ -243,7 +240,7 @@ function histogram() {
                 text
                     .append('tspan')
                     .attr('id', 'tspanbottom')
-                    .attr('x', 20)
+                    .attr('x', 10)
                     .attr('dy', 20);
 
                 d3.select('.axis.axis--y')
