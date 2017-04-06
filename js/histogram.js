@@ -40,6 +40,11 @@ function histogram() {
     // we instantiate it at the same time
     // as the chart itself
     var draw = function() {};
+    var updateWidth = function() {};
+    var updateHeight = function() {};
+
+    var x_scale = d3.scaleLinear();
+    var y_scale = d3.scaleLinear();
 
     // chart object
     function chart(selection) {
@@ -48,10 +53,10 @@ function histogram() {
             // initialise the svg for drawing
             svg = d3.select(this)
                 .append('svg')
+                .attr('class', 'histogram-svg')
                 .attr('height', height)
-                .attr('width', width);
-
-            svg = svg.append('g')
+                .attr('width', width)
+                .append('g')
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
             // only use inner portion (inside margin) for drawing
@@ -82,34 +87,34 @@ function histogram() {
 
         updateWidth = function() {
             if (svg) {
-                d3.select('svg')
-                    .transition(t)
+                d3.select('.histogram-svg')
+                    //.transition(t)
                     .attr('width', width);
 
                 width = width - margin.left - margin.right;
 
-                x_scale.range([0, width]);
+                x_scale.rangeRound([0, width]);
 
-                d3.select('svg')
+                d3.select('.histogram-svg')
                     .select('.x.axis-label')
-                    .transition(t)
+                    //.transition(t)
                     .attr("transform", "translate(" + width / 2 + "," + (height + 30) + ")");
             }
         }
 
         updateHeight = function() {
             if (svg) {
-                d3.select('svg')
-                    .transition(t)
+                d3.select('.histogram-svg')
+                    //.transition(t)
                     .attr('height', height);
 
                 height = height - margin.top - margin.bottom;
 
-                y_scale.range([height, 0]);
+                y_scale.rangeRound([height, 0]);
 
-                d3.select('svg')
+                d3.select('.histogram-svg')
                     .select('.y.axis-label')
-                    .transition(t)
+                    //.transition(t)
                     .attr("transform", "translate(-50," + height / 2 + ")rotate(-90)")
             }
         }
@@ -124,6 +129,7 @@ function histogram() {
                 var maxValue = d3.max(data, function(d) {
                     return d.Waiting_time;
                 });
+
                 x_scale.domain([0, maxValue]);
 
                 // set up histogram
@@ -144,6 +150,8 @@ function histogram() {
                     return d.length;
                 })]);
 
+                var bar_width = x_scale(bins[0].x1) - x_scale(bins[0].x0) - 1;
+
                 // draw the bars
                 var bar = svg
                     .selectAll(".bar")
@@ -151,7 +159,7 @@ function histogram() {
 
                 bar
                     .exit()
-                    .transition(t)
+                    //.transition(t)
                     .remove();
 
                 var newbar = bar
@@ -161,17 +169,18 @@ function histogram() {
 
                 newbar
                     .append('rect')
+                    .attr('class', 'histogram-bar-rect')
                     .attr("height", 0)
                     .attr("y", 0);
 
                 newbar.merge(bar)
-                    .select('rect')
-                    .transition(t)
+                    .select('.histogram-bar-rect')
+                    //.transition(t)
                     .attr("x", function(d) {
                         return (d.x0 * width) / maxValue;
                     })
                     .attr("fill", "#ff6600")
-                    .attr("width", x_scale(bins[0].x1) - x_scale(bins[0].x0) - 1)
+                    .attr("width", x_scale(bins[0].x1) - x_scale(bins[0].x0))
                     .attr("height", function(d) {
                         return height - y_scale(d.length);
                     })
@@ -180,7 +189,7 @@ function histogram() {
                     })
 
                 newbar
-                    .select('rect')
+                    .select('.histogram-bar-rect')
                     .on("mouseover", function(d) {
 
                         d3.select(this)
@@ -214,7 +223,7 @@ function histogram() {
                     .remove();
 
                 // create a blank tooltip, and hide it
-                tooltip = d3.select('svg')
+                tooltip = d3.select('.histogram-svg')
                     .append('g')
                     .attr('id', 'tooltip')
                     .attr('display', 'none')
@@ -244,11 +253,11 @@ function histogram() {
                     .attr('dy', 20);
 
                 d3.select('.axis.axis--y')
-                    .transition(t)
+                    //.transition(t)
                     .call(d3.axisLeft(y_scale));
 
                 d3.select('.axis.axis--x')
-                    .transition(t)
+                    //.transition(t)
                     .call(d3.axisBottom(x_scale)
                         .tickValues(binedges));
 

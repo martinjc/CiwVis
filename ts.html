@@ -15,3 +15,166 @@
       </div>
 </div>
 <div id="timeseries" class="vis"></div><script src="js/timeseries.js"></script>
+<script>
+
+var ts_chart = timeseries();
+
+d3.select('#timeseries')
+    .call(ts_chart);
+
+var raw_data;
+
+var tsdatafile = choosefile('time_series_data.json')
+const tsfileReader = new FileReader();
+tsfileReader.onload = event => {
+    const contentsOfFile = event.target.result;
+    raw_data = JSON.parse(contentsOfFile);
+    update_ts();
+}
+tsfileReader.readAsText(tsdatafile);
+
+function update_ts() {
+    var view_width = document.getElementById("timeseries")
+        .clientWidth;
+    var view_height = document.getElementById("timeseries")
+        .clientHeight;
+
+    console.log("time_series", width, height);
+
+    var num_nodes = parseInt(sessionStorage.getItem('Number_of_nodes'))
+    var num_classes = parseInt(sessionStorage.getItem('Number_of_classes'))
+    var num_trials = parseInt(sessionStorage.getItem('Number_of_trials'))
+    var weeksstr = sessionStorage.getItem('Weeks')
+    var weeks = weeksstr.split(",")
+        .map(Number)
+
+    var casecode = 'Value'
+
+    for (i = 1; i <= num_nodes; i++) {
+        if (document.getElementById('node' + i + 'ts')
+            .checked) {
+            casecode += '1'
+        } else {
+            casecode += '0'
+        }
+    };
+    for (i = 0; i < num_classes; i++) {
+        if (document.getElementById('class' + i + 'ts')
+            .checked) {
+            casecode += '1'
+        } else {
+            casecode += '0'
+        }
+    };
+
+    var raw = document.getElementById('raw_ts');
+    var means = document.getElementById('means_ts');
+    var conf_on = document.getElementById('confidenceinterval_ts');
+    var conf = document.getElementById('confidence')
+        .value;
+
+    ts_chart
+        .width(width)
+        .height(height)
+        .casecode(casecode)
+        .num_trials(num_trials)
+        .data(raw_data);
+
+    if(raw.checked) {
+        ts_chart.raw(true);
+    }
+    else {
+        ts_chart.raw(false);
+    }
+
+    if(means.checked) {
+        var meandata = findmeandata(raw_data, casecode, weeks);
+        ts_chart.meandata(meandata);
+    } else {
+        ts_chart.meandata(undefined);
+    }
+
+    if(conf_on.checked) {
+        var meandata = findmeandata(raw_data, casecode, weeks);
+        var confdata = confidenceinterval(raw_data, meandata, conf, casecode, num_trials, weeks)
+        ts_chart.meandata(meandata);
+        ts_chart.confdata(confdata);
+    } else {
+        ts_chart.meandata(undefined);
+        ts_chart.confdata(undefined);
+    }
+
+
+}
+
+
+
+function findmeandata(data, casecode, weeks) {
+    var meandata = [];
+    for (w in weeks) {
+        var weekdata = data.filter(function(d) {
+            return d.Week == weeks[w];
+        })
+        var value = d3.mean(weekdata.map(function(d) {
+            return d[casecode];
+        }));
+        var point = {
+            'Week': weeks[w]
+        }
+        point[casecode] = value
+        meandata.push(point)
+    };
+    return meandata
+}
+
+function confidenceinterval(data, meandata, conf, casecode, num_trials, weeks) {
+    confdata = []
+    if (num_trials < 100) {
+        var z = jStat.normal.inv(conf, 0, 1)
+        for (w in weeks) {
+            var xbar = meandata.filter(function(d) {
+                return d.Week == weeks[w]
+            })[0][casecode]
+            var weekdata = data.filter(function(d) {
+                    return d.Week == weeks[w]
+                })
+                .map(function(d) {
+                    return d[casecode];
+                })
+            var sigma = jStat.stdev(weekdata)
+            var lowerconf = xbar - z * (sigma / Math.sqrt(num_trials))
+            var upperconf = xbar + z * (sigma / Math.sqrt(num_trials))
+            var point = {
+                'Week': weeks[w],
+                'UpperConf': upperconf,
+                'LowerConf': lowerconf
+            }
+            confdata.push(point)
+        };
+    } else {
+        var z = jStat.studentt.inv(conf, num_trials - 1)
+        for (w in weeks) {
+            var xbar = meandata.filter(function(d) {
+                return d.Week == weeks[w]
+            })[0][casecode]
+            var weekdata = data.filter(function(d) {
+                    return d.Week == weeks[w]
+                })
+                .map(function(d) {
+                    return d[casecode];
+                })
+            var sigma = jStat.stdev(weekdata)
+            var lowerconf = xbar - z * (sigma / Math.sqrt(num_trials))
+            var upperconf = xbar + z * (sigma / Math.sqrt(num_trials))
+            var point = {
+                'Week': weeks[w],
+                'UpperConf': upperconf,
+                'LowerConf': lowerconf
+            }
+            confdata.push(point)
+        };
+    }
+    return confdata
+}
+
+</script>
